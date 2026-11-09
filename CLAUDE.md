@@ -33,6 +33,8 @@ Flujo de una petición: `routes → controller → service → repository → mo
 
 ## Entidad Película
 `title`, `director`, `genre`, `rating` (puntaje).
+- `rating`: de 1 a 5 en pasos de 0.5 (1, 1.5, 2 ... 5), pensado para mostrarse como 5 estrellas. Regla validada en el service.
+- Las películas existen solo cuando un usuario autenticado las carga con POST (no hay API externa). El rating es un único valor por película, no un promedio de reseñas.
 
 ## Requisitos del TP (no olvidar)
 - CRUD completo: GET todos, GET por id, POST, PUT, DELETE
