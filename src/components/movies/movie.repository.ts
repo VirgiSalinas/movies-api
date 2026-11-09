@@ -6,12 +6,32 @@ import { IMovie, MovieModel } from "./movie.model";
 // PostgreSQL, solo reescribiríamos este archivo: el service y el controller no se enteran.
 // Acá no hay reglas de negocio ni nada de Express (req/res): solo leer y escribir en la base.
 
-// Filtros opcionales para el listado (ej: { genre: "drama" }).
-export type MovieFilter = Partial<IMovie>;
+// Filtros opcionales para el listado (vienen de ?genre=...&director=...&title=...).
+export interface MovieFilters {
+  genre?: string;
+  director?: string;
+  title?: string;
+}
 
-// GET todos (con filtro opcional). Sin filtro, {} trae todas.
-export function findAll(filter: MovieFilter = {}) {
-  return MovieModel.find(filter).sort({ createdAt: -1 }); // más nuevas primero
+// Escapa caracteres especiales de las expresiones regulares (. * ? etc.)
+// para que una búsqueda como "Mission: Impossible?" se tome literal.
+function escapeRegex(text: string) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+// GET todos, con filtros opcionales. Sin filtros, la consulta {} trae todas.
+// Acá traducimos los filtros "simples" al lenguaje de consultas de MongoDB.
+export function findAll(filters: MovieFilters = {}) {
+  const query: Record<string, unknown> = {};
+
+  // género: coincidencia exacta (en la base siempre está en minúscula)
+  if (filters.genre) query.genre = filters.genre.toLowerCase();
+
+  // director y título: "contiene", sin distinguir mayúsculas ($options: "i")
+  if (filters.director) query.director = { $regex: escapeRegex(filters.director), $options: "i" };
+  if (filters.title) query.title = { $regex: escapeRegex(filters.title), $options: "i" };
+
+  return MovieModel.find(query).sort({ createdAt: -1 }); // más nuevas primero
 }
 
 // GET por id. Devuelve la película o null si no existe.
