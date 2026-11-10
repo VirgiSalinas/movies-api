@@ -1,5 +1,6 @@
 import express from "express";
 import movieRoutes from "./components/movies/movie.routes";
+import userRoutes from "./components/users/user.routes";
 import { logger } from "./middlewares/logger";
 import { errorHandler, notFound } from "./middlewares/errorHandlers";
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.get("/health", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
+app.use("/api/auth", userRoutes);
 app.use("/api/movies", movieRoutes);
 
 // 4) Si ninguna ruta respondió -> 404 en JSON
