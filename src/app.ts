@@ -1,4 +1,5 @@
 import express from "express";
+import movieRoutes from "./components/movies/movie.routes";
 
 // app.ts SOLO configura Express: middlewares y rutas.
 // No levanta el servidor ni conecta a la base (eso es trabajo de server.ts).
@@ -12,5 +13,8 @@ app.use(express.json());
 app.get("/health", (_req, res) => {
   res.status(200).json({ status: "ok" });
 });
+
+// Todo lo que empiece con /api/movies lo atiende el router de películas.
+app.use("/api/movies", movieRoutes);
 
 export default app;
