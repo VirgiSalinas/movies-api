@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { auth } from "../../middlewares/auth";
 import * as movieController from "./movie.controller";
 
 // CAPA DE RUTAS
@@ -7,12 +8,14 @@ import * as movieController from "./movie.controller";
 // así que "/" significa /api/movies y "/:id" significa /api/movies/:id.
 const router = Router();
 
+// Públicas: cualquiera puede ver el catálogo.
 router.get("/", movieController.getAll);
 router.get("/:id", movieController.getById);
 
-// Cuando sumemos autenticación, estas tres van a llevar el middleware de JWT.
-router.post("/", movieController.create);
-router.put("/:id", movieController.update);
-router.delete("/:id", movieController.remove);
+// Protegidas: Express ejecuta las funciones en orden, de izquierda a derecha.
+// Primero "auth" verifica el token; solo si es válido llama a next() y sigue al controller.
+router.post("/", auth, movieController.create);
+router.put("/:id", auth, movieController.update);
+router.delete("/:id", auth, movieController.remove);
 
 export default router;
