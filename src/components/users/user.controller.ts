@@ -13,6 +13,19 @@ export async function register(req: Request, res: Response) {
   }
 }
 
+// GET /api/auth/me  (protegida: requiere token)
+export async function me(req: Request, res: Response) {
+  try {
+    // No leemos el id de la URL ni del body: lo sacamos del token, que guardó
+    // el middleware auth en req.userId. Así cada usuario solo puede ver SUS datos.
+    // El "!" le dice a TypeScript "confiá, acá existe": la ruta tiene auth antes.
+    const user = await userService.getProfile(req.userId!);
+    res.status(200).json(user);
+  } catch (error) {
+    handleError(res, error);
+  }
+}
+
 // POST /api/auth/login
 export async function login(req: Request, res: Response) {
   try {

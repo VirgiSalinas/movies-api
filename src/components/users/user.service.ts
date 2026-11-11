@@ -73,3 +73,13 @@ export async function login(input: UserInput) {
 
   return { token, user };
 }
+
+// ---------- PERFIL (GET /me) ----------
+// Recibe el id que el middleware auth sacó del token.
+export async function getProfile(userId: string) {
+  const user = await userRepository.findById(userId);
+  // El token puede ser válido pero el usuario ya no existir (por ejemplo, si lo borraron
+  // de la base después del login). En ese caso: 404.
+  if (!user) throw new HttpError(404, "Usuario no encontrado");
+  return user;
+}

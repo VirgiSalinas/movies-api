@@ -1,3 +1,4 @@
+import { isValidObjectId } from "mongoose";
 import { IUser, UserModel } from "./user.model";
 
 // Único archivo que habla con UserModel (mismo rol que movie.repository).
@@ -11,6 +12,12 @@ export function findByEmail(email: string) {
 // Como el schema tiene select: false, hay que pedirlo con "+password".
 export function findByEmailWithPassword(email: string) {
   return UserModel.findOne({ email: email.toLowerCase() }).select("+password");
+}
+
+// Para /me: busca por id. Sin "+password", así que el hash no viene.
+export function findById(id: string) {
+  if (!isValidObjectId(id)) return null;
+  return UserModel.findById(id);
 }
 
 export function create(data: IUser) {
