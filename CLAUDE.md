@@ -38,7 +38,7 @@ Flujo de una petición: `routes → controller → service → repository → mo
 
 ## Requisitos del TP (no olvidar)
 - CRUD completo: GET todos, GET por id, POST, PUT, DELETE
-- ≥2 validaciones de negocio en el service (ej: rating de 1 a 10)
+- ≥2 validaciones de negocio en el service (ej: rating de 1 a 5 en pasos de 0.5)
 - POST/PUT/DELETE protegidos con middleware JWT; el token no lleva datos sensibles
 - Códigos: 200, 201, 400, 401, 404, 500
 - `.env` en `.gitignore`, `.env.example` sin valores
