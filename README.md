@@ -25,8 +25,8 @@ Trabajo práctico integrador del **Bootcamp 5.0 · Módulo Node.js**.
 1. Clonar el repositorio e instalar las dependencias:
 
    ```bash
-   git clone <URL-del-repositorio>
-   cd ApiRest
+   git clone https://github.com/VirgiSalinas/movies-api.git
+   cd movies-api
    npm install
    ```
 
